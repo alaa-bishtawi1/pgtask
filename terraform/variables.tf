@@ -18,10 +18,6 @@ variable "bucket_name" {
   default     = "progineeeralaabishtawi1"
 }
 
-variable "keypair_name" {
-  description = "Keypair name"
-  default     = "Alaa public key"
-}
 
 variable "my_public_ip" {
   description = "My Public IP"
