@@ -1,4 +1,0 @@
-postgres_password: "your_postgres_password"
-postgres_user: "myuser"
-postgres_db: "myschema"
-postgres_port: "5432"

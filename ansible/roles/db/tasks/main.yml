@@ -80,11 +80,11 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    - { regexp: '^#?listen_addresses', line: "listen_addresses = '*'" }
+    - { regexp: '^#?listen_addresses', line: "listen_addresses = '{{ db_private_ip }}'" }
   notify: restart postgres
 
 - name: Allow all IP addresses to connect
   lineinfile:
     dest: /etc/postgresql/{{ postgres_version }}/main/pg_hba.conf
-    line: "host    all             all             0.0.0.0/0               md5"
+    line: "host    all             all              {{ app_private_ip }}/32                 md5"
   notify: restart postgres

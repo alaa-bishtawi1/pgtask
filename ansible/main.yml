@@ -1,5 +1,4 @@
 ---
-
 - name: Playbook for DB hosts
   hosts: db
   become: yes
@@ -7,7 +6,6 @@
   roles:
     - db
 
-# Play for app hosts, applying the 'app' role
 - name: Playbook for app hosts
   hosts: app
   become: yes
