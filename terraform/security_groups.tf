@@ -6,8 +6,8 @@ resource "aws_security_group" "backend" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    # cidr_blocks = ["3.15.50.139/32"]
-        cidr_blocks = ["46.43.83.87/32"]
+        cidr_blocks = ["${var.my_public_ip}/32"]
+        
 
   }
 
@@ -35,8 +35,7 @@ resource "aws_security_group" "frontend" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    # cidr_blocks = ["3.15.50.139/32"]
-        cidr_blocks = ["46.43.83.87/32"]
+    cidr_blocks = ["${var.my_public_ip}/32"]
   }
 
   ingress {

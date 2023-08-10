@@ -23,3 +23,7 @@ variable "keypair_name" {
   default     = "Alaa public key"
 }
 
+variable "my_public_ip" {
+  description = "My Public IP"
+  default     = "46.43.83.87"
+}
