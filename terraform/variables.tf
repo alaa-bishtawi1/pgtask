@@ -15,11 +15,11 @@ variable "instance_type" {
 
 variable "bucket_name" {
   description = "S3 bucket name"
-  default     = "progineeeralaabishtawi1"
+  default     = "alaa-bishtawi-progineer-task-bucket"
 }
 
 
 variable "my_public_ip" {
   description = "My Public IP"
-  default     = "46.43.83.87"
+  default     = "86.107.17.53"
 }

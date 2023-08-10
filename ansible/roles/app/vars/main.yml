@@ -1,0 +1,2 @@
+app_repo: 'https://github.com/mhmdar/web-app.git'
+app_dest: /opt/app
