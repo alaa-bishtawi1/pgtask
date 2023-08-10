@@ -40,7 +40,7 @@
 
 - name: Update database URL in app.py
   lineinfile:
-    path: /opt/app/app.py
+    path: "{{ app_dest + '/app.py' }}"
     regexp: '^DATABASE_URL ='
     line: "DATABASE_URL = '{{ new_database_url }}'"
   become: yes
@@ -55,10 +55,10 @@
 
 
 - name: Start the application in the background
-  shell: nohup python3 /opt/app/app.py  > /opt/app/app.log 2>&1 &
+  shell: nohup python3 "{{ app_dest + '/app.py' }}"  > "{{ app_dest + '/app.log' }}" 2>&1 &
   args:
     executable: /bin/bash
-    chdir: /opt/app
+    chdir: '{{ app_dest }}'
   async: 10
   poll: 0
   become: yes
