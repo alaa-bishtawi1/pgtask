@@ -1,0 +1,6 @@
+postgres_password: "your_postgres_password"
+postgres_user: "myuser"
+postgres_db: "myschema"
+postgres_host: "localhost"
+postgres_port: "5432"
+postgres_db_host: 3.77.192.205

@@ -1,0 +1,136 @@
+--- 
+- name: Add PostgreSQL GPG key
+  apt_key:
+    url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+    state: present
+
+- name: Get Ubuntu codename
+  command: lsb_release -cs
+  register: ubuntu_codename
+  changed_when: False
+
+- name: Add PostgreSQL APT repository
+  apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ubuntu_codename.stdout }}-pgdg main"
+    state: present
+
+
+
+- name: Import PostgreSQL repository key
+  apt_key:
+    url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+    state: present
+
+- name: Update package lists
+  apt:
+    update_cache: yes
+
+- name: Install psycopg2 Python package
+  apt:
+    name: python3-psycopg2
+    state: present
+
+
+- name: Install PostgreSQL 13.5
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - postgresql-13
+    - postgresql-contrib-13
+
+
+- name: Enable and start Postgres service
+  systemd:
+    name: postgresql
+    state: started
+    enabled: yes
+
+
+
+- name: Set postgres user password
+  become: yes
+  shell: sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '{{postgres_password}}';"
+
+
+- name: Update pg_hba.conf to use MD5 authentication for postgres user
+  become: yes
+  lineinfile:
+    path: /etc/postgresql/13/main/pg_hba.conf
+    regexp: '^local\s+all\s+postgres\s+peer'
+    line: 'local   all             postgres                                md5'
+
+- name: Restart PostgreSQL service
+  become: yes
+  systemd:
+    name: postgresql
+    state: restarted
+
+- name: Create the database user
+  postgresql_user:
+    login_host: localhost
+    login_user: postgres
+    login_password: "{{postgres_password}}"
+    name: "{{postgres_user}}"
+    password: "{{postgres_password}}"
+    role_attr_flags: CREATEDB
+
+
+
+- name: Create the database
+  postgresql_db:
+    login_host: localhost
+    login_user: postgres
+    login_password: "{{postgres_password}}"
+    name: "{{postgres_db}}"
+    owner: "{{postgres_user}}"
+
+
+
+- name: Allow user to connect to the database
+  postgresql_privs:
+    login_host: localhost
+    login_user: postgres
+    login_password: "{{postgres_password}}"
+    db: "{{postgres_db}}"
+    privs: ALL
+    type: database
+    role: "{{postgres_user}}"
+
+
+- name: Set PostgreSQL configurations
+  lineinfile:
+    dest: /etc/postgresql/13/main/postgresql.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^#?listen_addresses', line: "listen_addresses = '*'" }
+  # notify: restart postgres
+
+- name: Allow all IP addresses to connect
+  lineinfile:
+    dest: /etc/postgresql/13/main/pg_hba.conf
+    line: "host    all             all             0.0.0.0/0               md5"
+  # notify: restart postgres
+
+- name: Restart PostgreSQL service
+  become: yes
+  systemd:
+    name: postgresql
+    state: restarted
+
+
+
+
+
+# #   - name: restart postgres
+# #     systemd:
+# #       name: postgresql
+# #       state: restarted
+# # Define handler to restart Postgres if needed
+
+# # handlers:
+# #   - name: restart postgres
+# #     systemd:
+# #       name: postgresql
+# #       state: restarted

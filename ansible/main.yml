@@ -1,0 +1,20 @@
+---
+# Play to run on all hosts
+# - name: Playbook for all hosts
+#   hosts: all
+#   tasks:
+#     - debug: msg="Hello World"
+
+# Play for DB hosts, applying the 'db' role
+
+- hosts: db
+  become: yes
+  # ignore_facts: no
+  roles:
+    - db
+
+# Play for app hosts, applying the 'app' role
+- hosts: app
+  become: yes
+  roles:
+    - app

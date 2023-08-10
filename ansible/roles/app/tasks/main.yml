@@ -1,0 +1,59 @@
+---
+
+- set_fact:
+    new_database_url: "postgresql://{{postgres_user}}:{{postgres_password}}@{{postgres_db_host}}/{{postgres_db}}"
+
+
+
+- name: Update package lists
+  apt:
+    update_cache: yes
+  become: yes
+
+- name: Install necessary dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - git
+    - python3
+  become: yes
+
+- name: Install python3-pip separately
+  apt:
+    name: python3-pip
+    state: present
+  become: yes
+
+
+
+- name: Clone the application repository
+  git:
+    repo: 'https://github.com/mhmdar/web-app.git'
+    dest: /opt/app
+
+- name: Update database URL in app.py
+  lineinfile:
+    path: /opt/app/app.py
+    regexp: '^DATABASE_URL ='
+    line: "DATABASE_URL = '{{ new_database_url }}'"
+  become: yes
+
+- name: Install Flask and psycopg2-binary
+  pip:
+    name: "{{ item }}"
+    executable: pip3
+  loop:
+    - flask
+    - psycopg2-binary
+
+
+- name: Start the application in the background
+  shell: nohup python3 /opt/app/app.py  > /opt/app/app.log 2>&1 &
+  args:
+    executable: /bin/bash
+    chdir: /opt/app
+  async: 10
+  poll: 0
+  become: yes
+
