@@ -14,8 +14,7 @@
     name: "{{ item }}"
     state: present
   loop:
-    - git
-    - python3
+    - "{{ dependencies }}"
 
 - name: Install python3-pip separately
   apt:
@@ -45,17 +44,17 @@
     line: "DATABASE_URL = '{{ new_database_url }}'"
   become: yes
 
-- name: Install Flask and psycopg2-binary
+- name: Install App requirements
   pip:
     name: "{{ item }}"
     executable: pip3
   loop:
-    - flask
-    - psycopg2-binary
+    - "{{ app_requirements }}"
 
 
-- name: Start the application in the background
-  shell: nohup python3 "{{ app_dest + '/app.py' }}"  > "{{ app_dest + '/app.log' }}" 2>&1 &
+
+- name: Start the application with Gunicorn in the background
+  shell: nohup gunicorn -w 4 -b 0.0.0.0:80 "app:app" > "{{ app_dest + '/app.log' }}" 2>&1 &
   args:
     executable: /bin/bash
     chdir: '{{ app_dest }}'

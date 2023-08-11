@@ -86,5 +86,5 @@
 - name: Allow all IP addresses to connect
   lineinfile:
     dest: /etc/postgresql/{{ postgres_version }}/main/pg_hba.conf
-    line: "host    all             all              {{ app_private_ip }}/32                 md5"
+    line: "host    all             all              {{ app_private_ip }}/32                 md5"  # or we can put vpc private cidr
   notify: restart postgres

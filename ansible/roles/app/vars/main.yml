@@ -1,2 +1,4 @@
 app_repo: 'https://github.com/mhmdar/web-app.git'
 app_dest: /opt/app
+app_requirements: ['flask', 'psycopg2-binary', 'gunicorn']
+dependencies: ['git', 'python3']
