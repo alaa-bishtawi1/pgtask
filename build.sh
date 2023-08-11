@@ -2,23 +2,31 @@
 cd terraform/
 terraform init
 terraform apply -auto-approve
-# Extract the EC2 IP addresses for DB and App servers using the correct output names
 
+# Extract the EC2 IP addresses for DB and App servers using the  output
 
 DB_PUBLIC_IP=$(terraform output db_instance_public_ip | tr -d '"')
 APP_PUBLIC_IP=$(terraform output app_instance_public_ip | tr -d '"')
 DB_LOCAL_IP=$(terraform output db_instance_local_ip | tr -d '"')
 APP_LOCAL_IP=$(terraform output app_instance_local_ip | tr -d '"')
 
+cd ../
 
-# Assign values
+if [ -s .env ]; then
+  source .env
+else
+  source .env.sample
+fi
+
+postgres_password=${POSTGRES_PASSWORD}
+postgres_user=${POSTGRES_USER}
+postgres_db=${POSTGRES_DB}
+postgres_port=${POSTGRES_PORT}
+postgres_host=${POSTGRES_HOST}
+
 postgres_db_host=${DB_LOCAL_IP}
-postgres_password="your_postgres_password"
-postgres_user="myuser"
-postgres_db="myschema"
-postgres_port="5432"
-postgres_host="localhost"
-cd ../ansible/
+
+cd ansible/
 
 
 
