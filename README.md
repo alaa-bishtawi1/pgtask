@@ -9,6 +9,7 @@ This repository contains the necessary Terraform and Ansible files to provision 
 - `.env.sample`: Sample environment file.
 - `build.sh`: Shell script to build the resources.
 - `destroy.sh`: Shell script to destroy the resources.
+- `screenshots/`: Screenshots for the notes.
 
 
 ## Usage
