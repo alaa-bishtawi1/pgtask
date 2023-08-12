@@ -15,7 +15,6 @@ resource "aws_security_group" "backend" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    # cidr_blocks = ["${aws_instance.app_instance.private_ip}/32"] # from sec group
   security_groups = [aws_security_group.frontend.id]
 
 

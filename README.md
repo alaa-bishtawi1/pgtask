@@ -23,23 +23,23 @@ This repository contains the necessary Terraform and Ansible files to provision 
 ### Instructions
 
 1. **Clone the Repository**
-   \`\`\`
+   ```
    git clone https://github.com/alaa-bishtawi1/pgtask.git
-   \`\`\`
+   ```
 
 2. **Navigate to the Repository**
-   \`\`\`
+   ```
    cd pgtask
-   \`\`\`
+   ```
 
 3. **Build the Resources**
-   \`\`\`
+   ```
    ./build.sh
-   \`\`\`
+   ```
 
 4. **Destroy the Resources (Optional)**
-   \`\`\`
+   ```
    ./destroy.sh
-   \`\`\`
+   ```
 
 

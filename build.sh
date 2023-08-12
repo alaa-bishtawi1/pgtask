@@ -23,11 +23,9 @@ postgres_user=${POSTGRES_USER}
 postgres_db=${POSTGRES_DB}
 postgres_port=${POSTGRES_PORT}
 postgres_host=${POSTGRES_HOST}
-
 postgres_db_host=${DB_LOCAL_IP}
 
 cd ansible/
-
 
 
 
@@ -42,10 +40,6 @@ postgres_db_host: $postgres_db_host
 app_private_ip: $APP_LOCAL_IP
 db_private_ip: $DB_LOCAL_IP
 EOLL
-
-
-
-
 
 
 

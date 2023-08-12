@@ -21,5 +21,5 @@ variable "bucket_name" {
 
 variable "my_public_ip" {
   description = "My Public IP"
-  default     = "86.107.17.53"
+  default     = "3.15.50.139"
 }
